@@ -1,0 +1,105 @@
+### Bifrost SmartRoute REST API Collection
+### Can be executed directly in VS Code (REST Client) or IntelliJ HTTP Client.
+
+@baseUrl = http://localhost:8080
+
+### 1. Gateway Health & Metrics Summary
+GET {{baseUrl}}/api/smartroute/metrics
+Accept: application/json
+
+### 2. Standard OpenAI-Compatible Chat Completion (Auto Routing)
+POST {{baseUrl}}/v1/chat/completions
+Content-Type: application/json
+
+{
+  "model": "smartroute",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Write a thread-safe singleton pattern in Go with sync.Once"
+    }
+  ],
+  "max_tokens": 512,
+  "temperature": 0.5
+}
+
+### 3. SmartRoute Interactive Playground Route Evaluation (Simple Query)
+POST {{baseUrl}}/api/smartroute/route
+Content-Type: application/json
+
+{
+  "prompt": "What is the speed of light in vacuum in meters per second?"
+}
+
+### 4. SmartRoute Interactive Playground Route Evaluation (Coding Problem)
+POST {{baseUrl}}/api/smartroute/route
+Content-Type: application/json
+
+{
+  "prompt": "Implement an asynchronous ring buffer queue in Rust using atomic pointers"
+}
+
+### 5. SmartRoute Interactive Playground Route Evaluation (Reasoning Challenge)
+POST {{baseUrl}}/api/smartroute/route
+Content-Type: application/json
+
+{
+  "prompt": "Prove by contradiction that the square root of 2 is irrational"
+}
+
+### 6. List All Registered AI Providers & Circuit Breaker Health
+GET {{baseUrl}}/api/smartroute/providers
+Accept: application/json
+
+### 7. List All Registered Models & Pricing Rates
+GET {{baseUrl}}/api/smartroute/models
+Accept: application/json
+
+### 8. View Request Logs (Paginated & Filterable)
+GET {{baseUrl}}/api/smartroute/logs?limit=20&page=1
+Accept: application/json
+
+### 9. Filter Request Logs by Category (e.g., coding)
+GET {{baseUrl}}/api/smartroute/logs?category=coding&limit=10
+Accept: application/json
+
+### 10. Simulate Provider Failure (Trips Circuit Breaker)
+POST {{baseUrl}}/api/smartroute/failover/simulate
+Content-Type: application/json
+
+{
+  "provider": "anthropic",
+  "error_code": 503
+}
+
+### 11. View Failover Audit Events
+GET {{baseUrl}}/api/smartroute/failover/events
+Accept: application/json
+
+### 12. List Active Routing Rules
+GET {{baseUrl}}/api/smartroute/rules
+Accept: application/json
+
+### 13. Toggle Routing Rule Status
+POST {{baseUrl}}/api/smartroute/rules/toggle
+Content-Type: application/json
+
+{
+  "rule_id": "rule-coding-tier",
+  "is_active": true
+}
+
+### 14. Get Gateway System Settings
+GET {{baseUrl}}/api/smartroute/settings
+Accept: application/json
+
+### 15. Update Gateway System Settings
+POST {{baseUrl}}/api/smartroute/settings
+Content-Type: application/json
+
+{
+  "baseline_model": "gpt-4o",
+  "circuit_breaker_threshold": 3,
+  "circuit_breaker_timeout_sec": 30,
+  "fallback_strategy": "auto_rank"
+}
