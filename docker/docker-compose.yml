@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  bifrost-smartroute:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: bifrost-smartroute
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DEMO_MODE=true
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+    volumes:
+      - smartroute_data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/smartroute/metrics"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+volumes:
+  smartroute_data:
+    driver: local
